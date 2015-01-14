@@ -3,6 +3,7 @@ package com.example.xutilchart;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import com.example.xutilchart.model.User;
 import com.example.xutilchart.util.PropertyDescriptor;
@@ -11,6 +12,9 @@ import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.utils.Legend;
+import com.github.mikephil.charting.utils.XLabels;
+import com.github.mikephil.charting.utils.YLabels;
 import com.lidroid.xutils.DbUtils;
 import com.lidroid.xutils.exception.DbException;
 
@@ -24,6 +28,7 @@ public class ChartActivity extends Activity {
     public static final String APP_DATA = "XUtils_MPAndroidChart";
 
     private LineChart chart;
+    private Typeface mTf;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -31,6 +36,7 @@ public class ChartActivity extends Activity {
         setContentView(R.layout.main);
 
         chart = (LineChart) super.findViewById(R.id.chart);
+        mTf = Typeface.createFromAsset(getAssets(), "OpenSans-Bold.ttf");
 
         initUser();
         constructChart(User.class, "score");
@@ -51,22 +57,117 @@ public class ChartActivity extends Activity {
                 float value = Float.parseFloat(String.valueOf(pd.getReadMethod().invoke(user)));
                 yVals.add(new Entry(value * random.nextInt(10), index++));
             }
+
             LineDataSet dataSet = new LineDataSet(yVals, propertyName);
-            dataSet.setLineWidth(2l);
-            dataSet.setHighLightColor(Color.BLUE);
-            dataSet.setCircleColor(Color.rgb(255, 211, 140));
-            dataSet.setCircleSize(2l);
-            dataSet.setColor(Color.GREEN);
+
+            dataSet.setLineWidth(1.75f);
+            dataSet.setCircleSize(3f);
+            dataSet.setColor(Color.WHITE);
+            dataSet.setCircleColor(Color.WHITE);
+            dataSet.setHighLightColor(Color.WHITE);
 
             ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
             dataSets.add(dataSet);
             LineData lineData = new LineData(xVals, dataSets);
 
-            chart.setBackgroundColor(Color.WHITE);
-            chart.setData(lineData);
+            setupChart(chart, lineData, mColors[random.nextInt(4)]);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private int[] mColors = new int[]{
+            Color.rgb(137, 230, 81),
+            Color.rgb(240, 240, 30),
+            Color.rgb(89, 199, 250),
+            Color.rgb(250, 104, 104)
+    };
+
+    private void setupChart(LineChart chart, LineData data, int color) {
+
+        // if enabled, the chart will always start at zero on the y-axis
+        chart.setStartAtZero(true);
+
+        // disable the drawing of values into the chart
+        chart.setDrawYValues(false);
+
+        chart.setDrawBorder(false);
+
+        // no description text
+        chart.setDescription("");
+        chart.setNoDataTextDescription("You need to provide data for the chart.");
+
+        // enable / disable grid lines
+        chart.setDrawVerticalGrid(false);
+        // mChart.setDrawHorizontalGrid(false);
+        //
+        // enable / disable grid background
+        chart.setDrawGridBackground(false);
+        chart.setGridColor(Color.WHITE & 0x70FFFFFF);
+        chart.setGridWidth(1.25f);
+
+        // enable touch gestures
+        chart.setTouchEnabled(true);
+
+        // enable scaling and dragging
+        chart.setDragEnabled(true);
+        chart.setScaleEnabled(true);
+
+        // if disabled, scaling can be done on x- and y-axis separately
+        chart.setPinchZoom(false);
+
+        chart.setBackgroundColor(color);
+
+        chart.setValueTypeface(mTf);
+
+        // add data
+        chart.setData(data);
+
+        // get the legend (only possible after setting data)
+        Legend l = chart.getLegend();
+
+        // modify the legend ...
+        // l.setPosition(LegendPosition.LEFT_OF_CHART);
+        l.setForm(Legend.LegendForm.CIRCLE);
+        l.setFormSize(6f);
+        l.setTextColor(Color.WHITE);
+        l.setTypeface(mTf);
+
+        YLabels y = chart.getYLabels();
+        y.setTextColor(Color.WHITE);
+        y.setTypeface(mTf);
+        y.setLabelCount(4);
+
+        XLabels x = chart.getXLabels();
+        x.setTextColor(Color.WHITE);
+        x.setTypeface(mTf);
+
+        // animate calls invalidate()...
+        chart.animateX(2500);
+    }
+
+    private void setchartStyle() {
+        chart.setBackgroundColor(Color.rgb(110, 222, 13));
+        chart.setGridColor(Color.rgb(219, 235, 1));
+        chart.setGridWidth(1.25f);
+        chart.setDrawBorder(false);
+        chart.setDescription("");
+        chart.setValueTextColor(Color.WHITE);
+        chart.setValueTextSize(12f);
+        chart.setDrawVerticalGrid(false);
+        chart.setDrawGridBackground(false);
+
+        // get the legend (only possible after setting data)
+        Legend l = chart.getLegend();
+        l.setTextColor(Color.WHITE);
+        l.setFormSize(12f);
+        YLabels y = chart.getYLabels();
+        y.setTextColor(Color.WHITE);
+        y.setTextSize(12f);
+        XLabels x = chart.getXLabels();
+        x.setTextColor(Color.WHITE);
+        x.setTextSize(12f);
     }
 
     private void initUser() {
@@ -88,7 +189,7 @@ public class ChartActivity extends Activity {
             user.setNickname("nickname" + i);
             user.setName("name" + i);
             user.setBirthday(new Date());
-            user.setScore(i);
+            user.setScore(Math.round(20));
             userList.add(user);
         }
 
