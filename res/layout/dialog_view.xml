@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:padding="10dp"
+        >
+
+    <TextView
+            android:text="用户登录"
+            android:textSize="20dp"
+            android:textColor="#FFFFFF"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginBottom="10pt"
+            android:height="20pt"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"/>
+
+    <EditText
+            android:id="@+id/username"
+            android:height="20pt"
+            android:background="@drawable/username_shape"
+            android:hint="账号"
+            android:paddingLeft="10pt"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"/>
+    <View
+            android:layout_width="fill_parent"
+            android:layout_height="0.2dp"
+            android:background="#CACDD1"/>
+    <EditText
+            android:id="@+id/password"
+            android:hint="密码"
+            android:height="20pt"
+            android:paddingLeft="10pt"
+            android:background="@drawable/password_shape"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"/>
+
+
+    <Button
+            android:id="@+id/login"
+            android:text="登  录"
+            android:textSize="18dp"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="10pt"
+            android:height="20pt"
+            android:background="@drawable/button_shape"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"/>
+</LinearLayout>
+
