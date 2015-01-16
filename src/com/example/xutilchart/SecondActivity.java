@@ -3,8 +3,10 @@ package com.example.xutilchart;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -38,6 +40,10 @@ public class SecondActivity extends Activity {
         AlertDialog.Builder builder = new AlertDialog.Builder(SecondActivity.this);
         builder.setView(view);
         final AlertDialog dialog = builder.create();
+
+        Window window = dialog.getWindow();
+        window.setGravity(Gravity.CENTER);  //此处可以设置dialog显示的位置
+        window.setWindowAnimations(R.style.dialog_animation);
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
